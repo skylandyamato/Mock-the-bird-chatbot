@@ -3,28 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To Kill a Mockingbird - Chapter Summaries</title>
+    <title>To Kill a Mockingbird - Chapter Summaries & Analysis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #8B0000;
+            --secondary-color: #D2B48C;
+            --accent-color: #556B2F;
+            --light-color: #F5F5DC;
+            --dark-color: #333;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+        }
+
         body {
-            font-family: sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-            color: #333;
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            line-height: 1.6;
+            background-image: url('https://images.unsplash.com/photo-1510189511974-4e71fd5f3d1a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+            background-color: rgba(245, 245, 220, 0.9);
         }
 
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            margin: 30px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            border: 1px solid var(--secondary-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--secondary-color));
         }
 
         h1 {
             text-align: center;
-            color: #555;
-            margin-bottom: 20px;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 1px 1px 2px var(--shadow-color);
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            right: 25%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+        }
+
+        .book-cover {
+            display: block;
+            width: 200px;
+            margin: 0 auto 30px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            transition: transform 0.3s ease;
+        }
+
+        .book-cover:hover {
+            transform: scale(1.05);
+        }
+
+        .search-container {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+        }
+
+        #search-input {
+            padding: 10px 15px;
+            width: 70%;
+            border: 1px solid var(--secondary-color);
+            border-radius: 25px 0 0 25px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        #search-btn {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0 25px 25px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #search-btn:hover {
+            background-color: #6B0000;
         }
 
         .chapter-list {
@@ -33,276 +120,998 @@
         }
 
         .chapter-item {
-            margin-bottom: 15px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 15px;
+            margin-bottom: 20px;
+            border-bottom: 1px dashed var(--secondary-color);
+            padding-bottom: 20px;
+            transition: all 0.3s ease;
         }
 
         .chapter-item:last-child {
             border-bottom: none;
         }
 
+        .chapter-item:hover {
+            background-color: rgba(210, 180, 140, 0.1);
+            transform: translateX(5px);
+        }
+
         .chapter-title {
             font-weight: bold;
-            color: #337ab7;
+            color: var(--accent-color);
             cursor: pointer;
             margin-bottom: 5px;
+            font-size: 1.3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: rgba(139, 0, 0, 0.05);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .chapter-title:hover {
+            background-color: rgba(139, 0, 0, 0.1);
+        }
+
+        .chapter-title::after {
+            content: "+";
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .chapter-item.active .chapter-title::after {
+            content: "-";
         }
 
         .chapter-summary {
-            display: none; /* Initially hide the summaries */
-            padding-left: 15px;
-            color: #666;
-            line-height: 1.6;
+            display: none;
+            padding: 15px;
+            color: var(--dark-color);
+            line-height: 1.7;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-left: 3px solid var(--primary-color);
+            margin-top: 10px;
+            border-radius: 0 5px 5px 0;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .chapter-item.active .chapter-summary {
-            display: block; /* Show summary when active */
+            display: block;
+        }
+
+        .theme-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .theme-tag {
+            background-color: var(--secondary-color);
+            color: var(--dark-color);
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        .quote {
+            font-style: italic;
+            color: var(--primary-color);
+            border-left: 2px solid var(--accent-color);
+            padding-left: 15px;
+            margin: 15px 0;
+        }
+
+        .character-mention {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--secondary-color);
+            color: var(--dark-color);
+            font-size: 0.9rem;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            background-color: #6B0000;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 5px;
+            background-color: #f1f1f1;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            width: 0%;
+        }
+
+        .toggle-dark-mode {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--dark-color);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 2px 5px var(--shadow-color);
+        }
+
+        body.dark-mode {
+            background-color: #222;
+            color: #f0f0f0;
+        }
+
+        body.dark-mode .container {
+            background-color: #333;
+            color: #f0f0f0;
+        }
+
+        body.dark-mode .chapter-summary {
+            background-color: #444;
+            color: #f0f0f0;
+        }
+
+        body.dark-mode .chapter-title {
+            color: #D2B48C;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 15px;
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            #search-input {
+                width: 60%;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <button class="toggle-dark-mode" id="darkModeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+
     <div class="container">
-        <h1>To Kill a Mockingbird - Chapter Summaries</h1>
+        <img src="https://m.media-amazon.com/images/I/71FxgtFKcQL._AC_UF1000,1000_QL80_.jpg" alt="To Kill a Mockingbird Book Cover" class="book-cover">
+        
+        <h1>To Kill a Mockingbird <br>Chapter Summaries & Analysis</h1>
+        
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search chapters or themes...">
+            <button id="search-btn"><i class="fas fa-search"></i></button>
+        </div>
+
         <ul class="chapter-list">
+            <!-- Chapter 1 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 1</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 1: Introduction to Maycomb</h2>
                 <div class="chapter-summary">
-                    The narrator, Scout Finch, begins by recounting the events leading up to her brother Jem's broken arm. She then introduces their small town of Maycomb, Alabama, and their mysterious neighbor, Boo Radley, who fascinates the children. Their father, Atticus Finch, a lawyer, is a central figure in their lives. The chapter sets the scene and introduces the key characters and the prevailing curiosity surrounding the Radley Place.
+                    <p>The narrator, <span class="character-mention">Scout Finch</span>, begins by recounting the events leading up to her brother <span class="character-mention">Jem</span>'s broken arm. She then introduces their small town of <span class="character-mention">Maycomb, Alabama</span>, and their mysterious neighbor, <span class="character-mention">Boo Radley</span>, who fascinates the children. Their father, <span class="character-mention">Atticus Finch</span>, a lawyer, is a central figure in their lives.</p>
+                    
+                    <div class="quote">
+                        "Maycomb was an old town, but it was a tired old town when I first knew it. In rainy weather the streets turned to red slop; grass grew on the sidewalks, the courthouse sagged in the square."
+                    </div>
+                    
+                    <p>The chapter sets the scene and introduces the key characters and the prevailing curiosity surrounding the Radley Place.</p>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Setting</span>
+                        <span class="theme-tag">Childhood</span>
+                        <span class="theme-tag">Mystery</span>
+                    </div>
                 </div>
             </li>
+            
+            <!-- Chapter 2 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 2</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 2: School Days</h2>
                 <div class="chapter-summary">
-                    Scout starts first grade and is unimpressed with the rigid and somewhat illogical teaching methods of Miss Caroline Fisher. Scout's ability to read and write, learned from Atticus and Calpurnia (their black housekeeper), is frowned upon. The chapter highlights the social and educational disparities present in Maycomb.
+                    <p><span class="character-mention">Scout</span> starts first grade and is unimpressed with the rigid and somewhat illogical teaching methods of <span class="character-mention">Miss Caroline Fisher</span>. Scout's ability to read and write, learned from Atticus and <span class="character-mention">Calpurnia</span> (their black housekeeper), is frowned upon.</p>
+                    
+                    <div class="quote">
+                        "Until I feared I would lose it, I never loved to read. One does not love breathing."
+                    </div>
+                    
+                    <p>The chapter highlights the social and educational disparities present in Maycomb.</p>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Education</span>
+                        <span class="theme-tag">Social Class</span>
+                        <span class="theme-tag">Innocence</span>
+                    </div>
                 </div>
             </li>
+            
+            <!-- Chapter 3 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 3</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 3: Lessons in Empathy</h2>
                 <div class="chapter-summary">
-                    Scout gets into trouble for explaining Walter Cunningham's poverty to Miss Caroline. Jem invites Walter home for lunch, where Scout is rude to him. Calpurnia reprimands Scout and teaches her about manners. Later, Atticus explains the Cunningham's pride and their unique situation. The chapter explores themes of social class and empathy.
+                    <p><span class="character-mention">Scout</span> gets into trouble for explaining <span class="character-mention">Walter Cunningham</span>'s poverty to Miss Caroline. Jem invites Walter home for lunch, where Scout is rude to him. <span class="character-mention">Calpurnia</span> reprimands Scout and teaches her about manners. Later, Atticus explains the Cunningham's pride and their unique situation.</p>
+                    
+                    <div class="quote">
+                        "You never really understand a person until you consider things from his point of view... Until you climb inside of his skin and walk around in it."
+                    </div>
+                    
+                    <p>The chapter explores themes of social class and empathy.</p>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Empathy</span>
+                        <span class="theme-tag">Social Class</span>
+                        <span class="theme-tag">Manners</span>
+                    </div>
                 </div>
             </li>
+            
+            <!-- Chapter 4 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 4</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 4: The Radley Game</h2>
                 <div class="chapter-summary">
-                    Summer arrives, and Dill Harris returns to Maycomb. The children's fascination with Boo Radley intensifies, and they devise plans to lure him out of his house. They find small treasures in a knot-hole of an oak tree in the Radley's yard, sparking their curiosity further.
+                    <p>Summer arrives, and <span class="character-mention">Dill Harris</span> returns to Maycomb. The children's fascination with <span class="character-mention">Boo Radley</span> intensifies, and they devise plans to lure him out of his house. They find small treasures in a knot-hole of an oak tree in the Radley's yard, sparking their curiosity further.</p>
+                    
+                    <div class="quote">
+                        "The Radley Place fascinated Dill. In spite of our warnings and explanations it drew him as the moon draws water."
+                    </div>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Curiosity</span>
+                        <span class="theme-tag">Childhood</span>
+                        <span class="theme-tag">Mystery</span>
+                    </div>
                 </div>
             </li>
+            
+            <!-- Chapter 5 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 5</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 5: Miss Maudie's Wisdom</h2>
                 <div class="chapter-summary">
-                    Atticus catches the children trying to send a note to Boo Radley and tells them to leave him alone. Scout spends more time with Miss Maudie Atkinson, their neighbor, who shares her understanding of Atticus and the Radley family. Miss Maudie clarifies some of the rumors surrounding Boo.
+                    <p><span class="character-mention">Atticus</span> catches the children trying to send a note to <span class="character-mention">Boo Radley</span> and tells them to leave him alone. Scout spends more time with <span class="character-mention">Miss Maudie Atkinson</span>, their neighbor, who shares her understanding of Atticus and the Radley family. Miss Maudie clarifies some of the rumors surrounding Boo.</p>
+                    
+                    <div class="quote">
+                        "There are just some kind of men who—who're so busy worrying about the next world they've never learned to live in this one."
+                    </div>
+                    
+                    <p>The chapter provides insight into the Radley family history and establishes Miss Maudie as a voice of reason.</p>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Gossip</span>
+                        <span class="theme-tag">Friendship</span>
+                        <span class="theme-tag">Perspective</span>
+                    </div>
                 </div>
             </li>
+            
+            <!-- Chapter 6 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 6</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 6: The Radley Raid</h2>
                 <div class="chapter-summary">
-                    The children attempt to peek into the Radley house at night but are startled by a shotgun blast. Jem loses his pants while escaping, and later retrieves them to avoid Atticus's suspicion. The chapter builds suspense and highlights the children's reckless curiosity.
+                    <p>The children attempt to peek into the Radley house at night but are startled by a shotgun blast. Jem loses his pants while escaping, and later retrieves them to avoid Atticus's suspicion. The chapter builds suspense and highlights the children's reckless curiosity.</p>
+                    
+                    <div class="quote">
+                        "It was then, I suppose, that Jem and I first began to part company. Sometimes I did not understand him, but my periods of bewilderment were short-lived."
+                    </div>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Adventure</span>
+                        <span class="theme-tag">Fear</span>
+                        <span class="theme-tag">Growing Up</span>
+                    </div>
                 </div>
             </li>
+            
+            <!-- Chapter 7 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 7</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 7: Gifts in the Knot-Hole</h2>
                 <div class="chapter-summary">
-                    Jem tells Scout about finding his pants mended and folded on the fence when he went back for them. The children continue to find small gifts in the knot-hole, suggesting Boo Radley's quiet attempts at connection. They are saddened when Nathan Radley fills the hole with cement.
+                    <p>Jem tells Scout about finding his pants mended and folded on the fence when he went back for them. The children continue to find small gifts in the knot-hole, suggesting <span class="character-mention">Boo Radley</span>'s quiet attempts at connection. They are saddened when <span class="character-mention">Nathan Radley</span> fills the hole with cement.</p>
+                    
+                    <div class="quote">
+                        "When we went in the house I saw he had been crying; his face was dirty in the right places, but I thought it odd that I had not heard him."
+                    </div>
+                    
+                    <p>The chapter shows the first real evidence of Boo's kindness and the children's growing understanding.</p>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Kindness</span>
+                        <span class="theme-tag">Connection</span>
+                        <span class="theme-tag">Loss</span>
+                    </div>
                 </div>
             </li>
+            
+            <!-- Chapter 8 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 8</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 8: Snow and Fire</h2>
                 <div class="chapter-summary">
-                    Maycomb experiences an unusual snowfall. Miss Maudie's house catches fire, and the community comes together to help. Scout is mysteriously wrapped in a blanket during the fire, and Jem realizes it must have been Boo Radley, showing a moment of unexpected kindness.
+                    <p>Maycomb experiences an unusual snowfall. <span class="character-mention">Miss Maudie</span>'s house catches fire, and the community comes together to help. Scout is mysteriously wrapped in a blanket during the fire, and Jem realizes it must have been <span class="character-mention">Boo Radley</span>, showing a moment of unexpected kindness.</p>
+                    
+                    <div class="quote">
+                        "I looked down and found myself clutching a brown woolen blanket I was wearing around my shoulders, squaw-fashion."
+                    </div>
+                    
+                    <p>The chapter demonstrates community spirit and provides another clue about Boo's true nature.</p>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Community</span>
+                        <span class="theme-tag">Kindness</span>
+                        <span class="theme-tag">Mystery</span>
+                    </div>
                 </div>
             </li>
+            
+            <!-- Chapter 9 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 9</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 9: Atticus Takes the Case</h2>
                 <div class="chapter-summary">
-                    Atticus agrees to defend Tom Robinson, a black man accused of assaulting a white woman. Scout faces taunts and prejudice from her classmates because of her father's decision. Atticus explains his moral obligation to take the case, emphasizing the importance of justice and integrity.
+                    <p><span class="character-mention">Atticus</span> agrees to defend <span class="character-mention">Tom Robinson</span>, a black man accused of assaulting a white woman. Scout faces taunts and prejudice from her classmates because of her father's decision. Atticus explains his moral obligation to take the case, emphasizing the importance of justice and integrity.</p>
+                    
+                    <div class="quote">
+                        "The one place where a man ought to get a square deal is in a courtroom, be he any color of the rainbow, but people have a way of carrying their resentments right into a jury box."
+                    </div>
+                    
+                    <p>The chapter introduces the central conflict of the novel and Atticus's moral stance.</p>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Justice</span>
+                        <span class="theme-tag">Racism</span>
+                        <span class="theme-tag">Courage</span>
+                    </div>
                 </div>
             </li>
+            
+            <!-- Chapter 10 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 10</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 10: One-Shot Finch</h2>
                 <div class="chapter-summary">
-                    The children are ashamed of Atticus's age and perceived lack of interesting skills until he calmly shoots a mad dog, Tim Johnson, demonstrating his hidden talent and courage. Miss Maudie explains Atticus's past as "One-Shot Finch," revealing a new dimension to his character.
+                    <p>The children are ashamed of Atticus's age and perceived lack of interesting skills until he calmly shoots a mad dog, <span class="character-mention">Tim Johnson</span>, demonstrating his hidden talent and courage. <span class="character-mention">Miss Maudie</span> explains Atticus's past as "One-Shot Finch," revealing a new dimension to his character.</p>
+                    
+                    <div class="quote">
+                        "I wanted you to see what real courage is, instead of getting the idea that courage is a man with a gun in his hand."
+                    </div>
+                    
+                    <p>The chapter changes the children's perception of their father and introduces themes of true courage.</p>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Courage</span>
+                        <span class="theme-tag">Perception</span>
+                        <span class="theme-tag">Skill</span>
+                    </div>
                 </div>
             </li>
+            
+            <!-- Chapter 11 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 11</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 11: Mrs. Dubose's Lesson</h2>
                 <div class="chapter-summary">
-                    The children encounter the cantankerous Mrs. Henry Lafayette Dubose, who constantly insults Atticus. Jem loses his temper and destroys her camellia bushes. As punishment, he must read to her daily. Through this experience, the children learn about courage and resilience in the face of adversity.
+                    <p>The children encounter the cantankerous <span class="character-mention">Mrs. Henry Lafayette Dubose</span>, who constantly insults Atticus. Jem loses his temper and destroys her camellia bushes. As punishment, he must read to her daily. Through this experience, the children learn about courage and resilience in the face of adversity.</p>
+                    
+                    <div class="quote">
+                        "I wanted you to see what real courage is, instead of getting the idea that courage is a man with a gun in his hand. It's when you know you're licked before you begin but you begin anyway and you see it through no matter what."
+                    </div>
+                    
+                    <p>The chapter provides a profound lesson about moral courage and addiction.</p>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Courage</span>
+                        <span class="theme-tag">Addiction</span>
+                        <span class="theme-tag">Forgiveness</span>
+                    </div>
                 </div>
             </li>
+            
+            <!-- Chapter 12 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 12</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 12: Calpurnia's Church</h2>
                 <div class="chapter-summary">
-                    Dill does not come to Maycomb for the summer. Jem begins to mature and distance himself from Scout. Calpurnia takes the children to her black church, where they experience a different side of Maycomb's social structure and face some prejudice.
+                    <p><span class="character-mention">Dill</span> does not come to Maycomb for the summer. Jem begins to mature and distance himself from Scout. <span class="character-mention">Calpurnia</span> takes the children to her black church, where they experience a different side of Maycomb's social structure and face some prejudice.</p>
+                    
+                    <div class="quote">
+                        "It's not necessary to tell all you know. It's not ladylike—in the second place, folks don't like to have somebody around knowin' more than they do."
+                    </div>
+                    
+                    <p>The chapter explores racial divisions and Calpurnia's dual identity in black and white communities.</p>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Racism</span>
+                        <span class="theme-tag">Religion</span>
+                        <span class="theme-tag">Growing Up</span>
+                    </div>
                 </div>
             </li>
+            
+            <!-- Chapter 13 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 13</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 13: Aunt Alexandra Arrives</h2>
                 <div class="chapter-summary">
-                    Aunt Alexandra comes to live with the Finches to provide a feminine influence for Scout and to instill family pride. Her traditional views clash with Atticus's more progressive parenting style and Scout's tomboyish nature.
+                    <p><span class="character-mention">Aunt Alexandra</span> comes to live with the Finches to provide a feminine influence for Scout and to instill family pride. Her traditional views clash with Atticus's more progressive parenting style and Scout's tomboyish nature.</p>
+                    
+                    <div class="quote">
+                        "Your aunt's doing me a favor as well as you all. I can't stay here all day with you, and the summer's going to be a hot one."
+                    </div>
+                    
+                    <p>The chapter introduces tension between traditional Southern values and more progressive attitudes.</p>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Family</span>
+                        <span class="theme-tag">Gender Roles</span>
+                        <span class="theme-tag">Tradition</span>
+                    </div>
                 </div>
             </li>
+            
+            <!-- Chapter 14 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 14</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 14: Dill's Return</h2>
                 <div class="chapter-summary">
-                    Scout and Aunt Alexandra clash frequently. Scout misses Dill and is confused by the growing tension in the house. Jem reveals that Dill has run away from home and is hiding under Scout's bed. The children try to understand Dill's family situation.
+                    <p>Scout and <span class="character-mention">Aunt Alexandra</span> clash frequently. Scout misses <span class="character-mention">Dill</span> and is confused by the growing tension in the house. Jem reveals that Dill has run away from home and is hiding under Scout's bed. The children try to understand Dill's family situation.</p>
+                    
+                    <div class="quote">
+                        "I don't care one speck. It ain't right, somehow it ain't right to do 'em that way. Hasn't anybody got any business talkin' like that—it just makes me sick."
+                    </div>
+                    
+                    <p>The chapter explores themes of family dysfunction and the children's growing awareness of adult problems.</p>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Family</span>
+                        <span class="theme-tag">Conflict</span>
+                        <span class="theme-tag">Childhood</span>
+                    </div>
                 </div>
             </li>
+            
+            <!-- Chapter 15 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 15</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 15: The Lynch Mob</h2>
                 <div class="chapter-summary">
-                    Rumors and prejudice surrounding the upcoming trial intensify. A group of men comes to the Finch house to confront Atticus about defending Tom Robinson. Jem, Scout, and Dill witness this tense encounter, and Atticus calmly faces the threat.
+                    <p>Rumors and prejudice surrounding the upcoming trial intensify. A group of men comes to the Finch house to confront Atticus about defending <span class="character-mention">Tom Robinson</span>. Jem, Scout, and Dill witness this tense encounter, and Atticus calmly faces the threat.</p>
+                    
+                    <div class="quote">
+                        "A nightmare was upon us. The grown folks were talking and the children were listening."
+                    </div>
+                    
+                    <p>The chapter shows the rising racial tensions in Maycomb and the children's first real encounter with violent prejudice.</p>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Racism</span>
+                        <span class="theme-tag">Courage</span>
+                        <span class="theme-tag">Violence</span>
+                    </div>
                 </div>
             </li>
+            
+            <!-- Chapter 16 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 16</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 16: The Trial Begins</h2>
                 <div class="chapter-summary">
-                    The day of the trial arrives, and the atmosphere in Maycomb is charged. The children sneak into the courtroom and observe the proceedings from the balcony with the black community. The chapter sets the stage for the dramatic testimony to come.
+                    <p>The day of the trial arrives, and the atmosphere in Maycomb is charged. The children sneak into the courtroom and observe the proceedings from the balcony with the black community. The chapter sets the stage for the dramatic testimony to come.</p>
+                    
+                    <div class="quote">
+                        "It was like watching Atticus walk into the street, raise a rifle to his shoulder and pull the trigger, but watching all the time knowing that the gun was empty."
+                    </div>
+                    
+                    <p>The chapter builds tension as the town gathers for the trial, showing the segregated nature of the courtroom.</p>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Justice</span>
+                        <span class="theme-tag">Racism</span>
+                        <span class="theme-tag">Tension</span>
+                    </div>
                 </div>
             </li>
+            
+            <!-- Chapter 17 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 17</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 17: Heck Tate's Testimony</h2>
                 <div class="chapter-summary">
-                    The prosecution presents its case, focusing on the testimony of Sheriff Heck Tate and the alleged victim, Mayella Ewell. Tate's testimony reveals inconsistencies. Mayella appears uneducated, lonely, and seemingly afraid of her father.
+                    <p>The prosecution presents its case, focusing on the testimony of <span class="character-mention">Sheriff Heck Tate</span> and the alleged victim, <span class="character-mention">Mayella Ewell</span>. Tate's testimony reveals inconsistencies. Mayella appears uneducated, lonely, and seemingly afraid of her father.</p>
+                    
+                    <div class="quote">
+                        "We have a reasonable doubt, and that's all we have to have. The law says 'reasonable doubt,' and I'm reasonably doubtful."
+                    </div>
+                    
+                    <p>The chapter begins to reveal the flaws in the prosecution's case and the Ewells' questionable credibility.</p>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Justice</span>
+                        <span class="theme-tag">Testimony</span>
+                        <span class="theme-tag">Prejudice</span>
+                    </div>
                 </div>
             </li>
+            
+            <!-- Chapter 18 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 18</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 18: Mayella's Testimony</h2>
                 <div class="chapter-summary">
-                    Mayella Ewell gives her emotional and contradictory testimony, accusing Tom Robinson of assault. Atticus's cross-examination reveals her difficult home life, her possible attraction to Tom, and the inconsistencies in her story, suggesting her father might be responsible for her injuries.
+                    <p><span class="character-mention">Mayella Ewell</span> gives her emotional and contradictory testimony, accusing <span class="character-mention">Tom Robinson</span> of assault. Atticus's cross-examination reveals her difficult home life, her possible attraction to Tom, and the inconsistencies in her story, suggesting her father might be responsible for her injuries.</p>
+                    
+                    <div class="quote">
+                        "I got somethin' to say an' then I ain't gonna say no more. That nigger yonder took advantage of me an' if you fine fancy gentlemen don't wanta do nothin' about it then you're all yellow stinkin' cowards."
+                    </div>
+                    
+                    <p>The chapter exposes Mayella's vulnerability and the likely truth about what really happened.</p>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Lies</span>
+                        <span class="theme-tag">Abuse</span>
+                        <span class="theme-tag">Cross-Examination</span>
+                    </div>
                 </div>
             </li>
+            
+            <!-- Chapter 19 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 19</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 19: Tom's Testimony</h2>
                 <div class="chapter-summary">
-                    Tom Robinson gives his honest and straightforward testimony, explaining his regular assistance to Mayella and denying the assault. He reveals that Mayella often initiated contact and that her father caught them together. His sincerity contrasts sharply with the Ewells' testimonies.
+                    <p><span class="character-mention">Tom Robinson</span> gives his honest and straightforward testimony, explaining his regular assistance to Mayella and denying the assault. He reveals that Mayella often initiated contact and that her father caught them together. His sincerity contrasts sharply with the Ewells' testimonies.</p>
+                    
+                    <div class="quote">
+                        "I felt right sorry for her, she seemed to try more'n the rest of 'em—"
+                    </div>
+                    
+                    <p>The chapter makes clear Tom's innocence and the tragic reality of racial prejudice that will likely convict him anyway.</p>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Injustice</span>
+                        <span class="theme-tag">Testimony</span>
+                        <span class="theme-tag">Racism</span>
+                    </div>
                 </div>
             </li>
+            
+            <!-- Chapter 20 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 20</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 20: Atticus's Closing Argument</h2>
                 <div class="chapter-summary">
-                    During Atticus's closing argument, he eloquently appeals to the jury's sense of justice and reason, highlighting the lack of credible evidence against Tom and the ingrained racial prejudice at play. Scout and Dill are taken outside by Jem when he senses Atticus's emotional intensity.
+                    <p>During Atticus's closing argument, he eloquently appeals to the jury's sense of justice and reason, highlighting the lack of credible evidence against Tom and the ingrained racial prejudice at play. Scout and Dill are taken outside by Jem when he senses Atticus's emotional intensity.</p>
+                    
+                    <div class="quote">
+                        "But there is one way in this country in which all men are created equal—there is one human institution that makes a pauper the equal of a Rockefeller, the stupid man the equal of an Einstein, and the ignorant man the equal of any college president. That institution, gentlemen, is a court."
+                    </div>
+                    
+                    <p>The chapter contains one of the most powerful speeches in the novel about justice and equality.</p>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Justice</span>
+                        <span class="theme-tag">Equality</span>
+                        <span class="theme-tag">Racism</span>
+                    </div>
                 </div>
             </li>
+            
+            <!-- Chapter 21 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 21</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 21: The Verdict</h2>
                 <div class="chapter-summary">
-                    The jury deliberates for a long time. Finally, they return a guilty verdict. The black community in the balcony shows their respect for Atticus as he leaves the courtroom. The children are deeply affected by the injustice.
+                    <p>The jury deliberates for a long time. Finally, they return a guilty verdict. The black community in the balcony shows their respect for Atticus as he leaves the courtroom. The children are deeply affected by the injustice.</p>
+                    
+                    <div class="quote">
+                        "I saw something only a lawyer's child could be expected to see, could be expected to watch for, and it was like watching Atticus walk into the street, raise a rifle to his shoulder and pull the trigger, but watching all the time knowing that the gun was empty."
+                    </div>
+                    
+                    <p>The chapter delivers the tragic but expected verdict, showing the power of racial prejudice over justice.</p>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Injustice</span>
+                        <span class="theme-tag">Prejudice</span>
+                        <span class="theme-tag">Loss of Innocence</span>
+                    </div>
                 </div>
             </li>
+            
+            <!-- Chapter 22 -->
             <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 22</h2>
+                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 22: Aftermath of the Trial</h2>
                 <div class="chapter-summary">
-                    The black community shows their gratitude to Atticus by sending him food. Miss Maudie explains the small steps of progress being made and defends Atticus's efforts. Bob Ewell confronts Atticus, spitting in his face and threatening revenge.
+                    <p>The black community shows their gratitude to Atticus by sending him food. <span class="character-mention">Miss Maudie</span> explains the small steps of progress being made and defends Atticus's efforts. <span class="character-mention">Bob Ewell</span> confronts Atticus, spitting in his face and threatening revenge.</p>
+                    
+                    <div class="quote">
+                        "There's a black boy dead for no reason, and the man responsible for it's dead. Let the dead bury the dead this time, Mr. Finch."
+                    </div>
+                    
+                    <p>The chapter shows the community's reactions to the verdict and sets up future conflict with Bob Ewell.</p>
+                    
+                    <div class="theme-tags">
+                        <span class="theme-tag">Gratitude</span>
+                        <span class="theme-tag">Revenge</span>
+                        <span class="theme-tag">Progress</span>
+                    </div>
                 </div>
             </li>
-            <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 23</h2>
-                <div class="chapter-summary">
-                    Atticus calmly dismisses Bob Ewell's threats. He explains to Jem and Scout that Ewell needed to vent his anger. The children discuss the injustice of the verdict and the complexities of prejudice. Atticus reveals that one juror initially held out for acquittal.
-                </div>
-            </li>
-            <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 24</h2>
-                <div class="chapter-summary">
-                    Aunt Alexandra hosts a missionary circle meeting at the Finch house. The ladies of Maycomb display hypocritical attitudes, expressing concern for far-off people while remaining prejudiced against their own black community. News arrives that Tom Robinson was shot and killed while trying to escape prison.
-                </div>
-            </li>
-            <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 25</h2>
-                <div class="chapter-summary">
-                    The town reacts to Tom's death with varying degrees of interest and gossip. An editorial in the Maycomb Tribune condemns the injustice of his death. Scout reflects on the events of the summer and begins to understand the deep-seated prejudice in her community.
-                </div>
-            </li>
-            <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 26</h2>
-                <div class="chapter-summary">
-                    Life in Maycomb returns to a semblance of normalcy, though the events of the trial and Tom's death have left a lasting impact. Scout starts third grade and learns about Hitler in class, highlighting the irony of prejudice at home.
-                </div>
-            </li>
-            <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 27</h2>
-                <div class="chapter-summary">
-                    Bob Ewell continues to harbor a grudge and makes veiled threats against Atticus and others involved in the trial. There are three seemingly unrelated incidents: Ewell tries to break into Judge Taylor's house, harasses Helen Robinson, and follows the Finch children.
-                </div>
-            </li>
-            <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 28</h2>
-                <div class="chapter-summary">
-                    On their way home from the school Halloween pageant, Jem and Scout are attacked in the dark. Jem is injured, and Scout is saved by a mysterious figure. The attacker is revealed to be Bob Ewell.
-                </div>
-            </li>
-            <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 29</h2>
-                <div class="chapter-summary">
-                    Sheriff Tate investigates the attack and finds Bob Ewell dead, stabbed with a kitchen knife. Atticus initially believes Jem was responsible, but Tate insists that Ewell fell on his own knife, protecting Boo Radley.
-                </div>
-            </li>
-            <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 30</h2>
-                <div class="chapter-summary">
-                    Boo Radley is brought into the Finch house. Atticus and Sheriff Tate discuss the circumstances of Bob Ewell's death. Tate convinces Atticus that revealing Boo's heroism would subject him to unwanted attention, and they agree to report Ewell's death as accidental.
-                </div>
-            </li>
-            <li class="chapter-item">
-                <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 31</h2>
-                <div class="chapter-summary">
-                    Scout finally meets and talks with Boo Radley. She leads him home, imagining the world from his perspective as she stands on his porch. Atticus reads to her, and she falls asleep, understanding the events of the past few years and the true nature of courage and prejudice.
-                </div>
-            </li>
-        </ul>
+           <!-- Chapter 23 -->
+		   <li class="chapter-item">
+				<h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 23: Bob Ewell's Threat</h2>
+				<div class="chapter-summary">
+        <p><span class="character-mention">Atticus</span> remains calm about Bob Ewell's threat, but <span class="character-mention">Aunt Alexandra</span> and the children are concerned. <span class="character-mention">Jem</span> begins to understand the complexity of justice and the flawed nature of the jury system. Scout starts to see the world through a more mature lens.</p>
+        
+        <div class="quote">
+            "As you grow older, you'll see white men cheat black men every day of your life, but let me tell you something and don't you forget it — whenever a white man does that to a black man, no matter who he is, how rich he is, or how fine a family he comes from, he is trash."
+        </div>
+        
+        <p>The chapter explores the deeper social and moral lessons that Atticus tries to pass on to his children.</p>
+        
+        <div class="theme-tags">
+            <span class="theme-tag">Justice</span>
+            <span class="theme-tag">Morality</span>
+            <span class="theme-tag">Growing Up</span>
+        </div>
+    </div>
+</li>
+<!-- Chapter 23 -->
+<li class="chapter-item">
+    <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 23: Bob Ewell's Threat</h2>
+    <div class="chapter-summary">
+        <p><span class="character-mention">Atticus</span> remains calm about Bob Ewell's threat, but <span class="character-mention">Aunt Alexandra</span> and the children are concerned. <span class="character-mention">Jem</span> begins to understand the complexity of justice and the flawed nature of the jury system. Scout starts to see the world through a more mature lens.</p>
+        
+        <div class="quote">
+            "As you grow older, you'll see white men cheat black men every day of your life, but let me tell you something and don't you forget it — whenever a white man does that to a black man, no matter who he is, how rich he is, or how fine a family he comes from, he is trash."
+        </div>
+        
+        <p>The chapter explores the deeper social and moral lessons that Atticus tries to pass on to his children.</p>
+        
+        <div class="theme-tags">
+            <span class="theme-tag">Justice</span>
+            <span class="theme-tag">Morality</span>
+            <span class="theme-tag">Growing Up</span>
+        </div>
+    </div>
+</li>
+<!-- Chapter 24 -->
+<li class="chapter-item">
+    <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 24: Tea Time with the Missionary Circle</h2>
+    <div class="chapter-summary">
+        <p><span class="character-mention">Scout</span> observes the hypocrisy of the missionary circle ladies during a tea at the Finch home. News arrives that <span class="character-mention">Tom Robinson</span> has been shot trying to escape from prison. <span class="character-mention">Miss Maudie</span> stands up for Atticus in front of the judgmental women.</p>
+        
+        <div class="quote">
+            "His name's Tom Robinson, and the only thing he's done is live in this world."
+        </div>
+        
+        <p>The chapter highlights themes of hypocrisy and quiet strength in the face of injustice.</p>
+        
+        <div class="theme-tags">
+            <span class="theme-tag">Hypocrisy</span>
+            <span class="theme-tag">Gender Roles</span>
+            <span class="theme-tag">Loss</span>
+        </div>
+    </div>
+</li>
+
+<!-- Chapter 25 -->
+<li class="chapter-item">
+    <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 25: Tom's Death</h2>
+    <div class="chapter-summary">
+        <p><span class="character-mention">Dill</span> recounts how Atticus and <span class="character-mention">Calpurnia</span> delivered the news of Tom's death to his wife. <span class="character-mention">Mr. Underwood</span> writes a bitter editorial about the senseless killing. The town quickly moves on, indifferent to Tom’s fate.</p>
+        
+        <div class="quote">
+            "Tom was a dead man the minute Mayella Ewell opened her mouth and screamed."
+        </div>
+        
+        <p>This chapter emphasizes society’s apathy and reinforces the theme of injustice.</p>
+        
+        <div class="theme-tags">
+            <span class="theme-tag">Injustice</span>
+            <span class="theme-tag">Indifference</span>
+            <span class="theme-tag">Tragedy</span>
+        </div>
+    </div>
+</li>
+
+<!-- Chapter 26 -->
+<li class="chapter-item">
+    <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 26: Reflections at School</h2>
+    <div class="chapter-summary">
+        <p><span class="character-mention">Scout</span> returns to school and begins to notice contradictions in her teacher’s condemnation of Hitler while ignoring racism at home. <span class="character-mention">Jem</span> is deeply disturbed by reminders of the trial.</p>
+        
+        <div class="quote">
+            "Over here we don’t believe in persecuting anybody. Persecution comes from people who are prejudiced."
+        </div>
+        
+        <p>The chapter shows Scout’s growing critical thinking and the town’s moral blindness.</p>
+        
+        <div class="theme-tags">
+            <span class="theme-tag">Prejudice</span>
+            <span class="theme-tag">Irony</span>
+            <span class="theme-tag">Growth</span>
+        </div>
+    </div>
+</li>
+
+<!-- Chapter 27 -->
+<li class="chapter-item">
+    <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 27: Building Tension</h2>
+    <div class="chapter-summary">
+        <p><span class="character-mention">Bob Ewell</span> is seen harassing people connected to the trial. <span class="character-mention">Helen Robinson</span> is stalked, and Judge Taylor’s home is broken into. The town prepares for a Halloween pageant, adding to the suspense.</p>
+        
+        <div class="quote">
+            "This Halloween was gonna be different."
+        </div>
+        
+        <p>The chapter sets the stage for the novel’s climactic confrontation.</p>
+        
+        <div class="theme-tags">
+            <span class="theme-tag">Suspense</span>
+            <span class="theme-tag">Retaliation</span>
+            <span class="theme-tag">Foreshadowing</span>
+        </div>
+    </div>
+</li>
+
+<!-- Chapter 28 -->
+<li class="chapter-item">
+    <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 28: The Attack</h2>
+    <div class="chapter-summary">
+        <p>After the Halloween pageant, <span class="character-mention">Jem</span> and <span class="character-mention">Scout</span> are attacked in the dark. Jem is injured, but someone saves them—later revealed to be <span class="character-mention">Boo Radley</span>. <span class="character-mention">Bob Ewell</span> is found dead.</p>
+        
+        <div class="quote">
+            "A man was passing under it. The man was walking with the staccato steps of someone carrying a load too heavy for him."
+        </div>
+        
+        <p>The chapter delivers the long-anticipated confrontation and introduces Boo as a protector.</p>
+        
+        <div class="theme-tags">
+            <span class="theme-tag">Danger</span>
+            <span class="theme-tag">Heroism</span>
+            <span class="theme-tag">Mystery</span>
+        </div>
+    </div>
+</li>
+
+<!-- Chapter 29 -->
+<li class="chapter-item">
+    <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 29: Boo Revealed</h2>
+    <div class="chapter-summary">
+        <p><span class="character-mention">Scout</span> recounts the attack to <span class="character-mention">Heck Tate</span> and Atticus. She finally meets <span class="character-mention">Boo Radley</span> face to face and sees him as a gentle, kind protector.</p>
+        
+        <div class="quote">
+            "Hey, Boo."
+        </div>
+        
+        <p>This chapter brings Boo Radley into the light as a real person, not just a neighborhood myth.</p>
+        
+        <div class="theme-tags">
+            <span class="theme-tag">Revelation</span>
+            <span class="theme-tag">Kindness</span>
+            <span class="theme-tag">Perspective</span>
+        </div>
+    </div>
+</li>
+
+<!-- Chapter 30 -->
+<li class="chapter-item">
+    <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 30: Protecting Boo</h2>
+    <div class="chapter-summary">
+        <p><span class="character-mention">Heck Tate</span> insists that <span class="character-mention">Bob Ewell</span> fell on his own knife to protect Boo from public attention. <span class="character-mention">Atticus</span> initially resists but comes to agree. Scout understands that exposing Boo would be like "killing a mockingbird."</p>
+        
+        <div class="quote">
+            "Let the dead bury the dead."
+        </div>
+        
+        <p>The chapter illustrates moral complexity and the need for compassion and discretion.</p>
+        
+        <div class="theme-tags">
+            <span class="theme-tag">Protection</span>
+            <span class="theme-tag">Compassion</span>
+            <span class="theme-tag">Justice</span>
+        </div>
+    </div>
+</li>
+
+<!-- Chapter 31 -->
+<li class="chapter-item">
+    <h2 class="chapter-title" onclick="toggleSummary(this)">Chapter 31: Full Circle</h2>
+    <div class="chapter-summary">
+        <p><span class="character-mention">Scout</span> walks Boo Radley home and stands on his porch, seeing the world from his perspective. She reflects on the lessons Atticus taught her about empathy, kindness, and understanding others.</p>
+        
+        <div class="quote">
+            "Atticus, he was real nice."  
+            "Most people are, Scout, when you finally see them."
+        </div>
+        
+        <p>The novel ends on a note of growth, understanding, and the enduring wisdom of Atticus’s teachings.</p>
+        
+        <div class="theme-tags">
+            <span class="theme-tag">Empathy</span>
+            <span class="theme-tag">Growth</span>
+            <span class="theme-tag">Resolution</span>
+        </div>
+    </div>
+</li>
+</ul>
+<div class="footer">
+            <p>Created with <i class="fas fa-heart" style="color: var(--primary-color);"></i> for literature students</p>
+            <p>© 2023 To Kill a Mockingbird Study Guide | Harper Lee</p>
+        </div>
+    </div>
+
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
     </div>
 
     <script>
+        // Toggle chapter summaries
         function toggleSummary(titleElement) {
             const chapterItem = titleElement.parentNode;
             chapterItem.classList.toggle('active');
+            
+            // Scroll to the chapter if opening
+            if (chapterItem.classList.contains('active')) {
+                chapterItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
         }
+
+        // Search functionality
+        document.getElementById('search-btn').addEventListener('click', searchChapters);
+        document.getElementById('search-input').addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                searchChapters();
+            }
+        });
+
+        function searchChapters() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const chapters = document.querySelectorAll('.chapter-item');
+            
+            chapters.forEach(chapter => {
+                const title = chapter.querySelector('.chapter-title').textContent.toLowerCase();
+                const summary = chapter.querySelector('.chapter-summary').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || summary.includes(searchTerm)) {
+                    chapter.style.display = 'block';
+                    // Open the chapter if it matches search
+                    chapter.classList.add('active');
+                } else {
+                    chapter.style.display = 'none';
+                }
+            });
+        }
+
+        // Back to top button
+        const backToTopBtn = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+            
+            // Update progress bar
+            updateProgressBar();
+        });
+
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Progress bar
+        function updateProgressBar() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        }
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        });
+
+        // Highlight current chapter while scrolling
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.6
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    document.querySelectorAll('.chapter-item').forEach(item => {
+                        item.classList.remove('highlighted');
+                    });
+                    entry.target.classList.add('highlighted');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.chapter-item').forEach(item => {
+            observer.observe(item);
+        });
     </script>
-<script type="module">
-    import Chatbox from 'https://cdn.jsdelivr.net/npm/@chaindesk/embeds@latest/dist/chatbox/index.js';
-  
-    const widget = await Chatbox.initBubble({
-      agentId: 'cm9qowrig04ars6fkrfb34l25',
-      
-      // optional 
-      // If provided will create a contact for the user and link it to the conversation
-      contact: {
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'customer@email.com',
-        phoneNumber: '+33612345644',
-        userId: '42424242',
-      },
-      // optional
-      // Override initial messages
-      initialMessages: [
-        'Hello Georges how are you doing today?',
-        'How can I help you ?',
-      ],
-      // optional
-      // Provided context will be appended to the Agent system prompt
-      context: "The user you are talking to is John. Start by Greeting him by his name.",
-    });
-  
-    // open the chat bubble
-    widget.open();
-  
-    // close the chat bubble
-    widget.close()
-  
-    // or 
-    widget.toggle()
-  </script>
+	<script type="module">
+  import Chatbox from 'https://cdn.jsdelivr.net/npm/@chaindesk/embeds@latest/dist/chatbox/index.js';
 
+  const widget = await Chatbox.initBubble({
+    agentId: 'cm9qowrig04ars6fkrfb34l25',
+    
+    // optional 
+    // If provided will create a contact for the user and link it to the conversation
+    contact: {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'customer@email.com',
+      phoneNumber: '+33612345644',
+      userId: '42424242',
+    },
+    // optional
+    // Override initial messages
+    initialMessages: [
+      'Hello Georges how are you doing today?',
+      'How can I help you ?',
+    ],
+    // optional
+    // Provided context will be appended to the Agent system prompt
+    context: "The user you are talking to is John. Start by Greeting him by his name.",
+  });
 
+  // open the chat bubble
+  widget.open();
 
+  // close the chat bubble
+  widget.close()
 
-
-
-
-
-
+  // or 
+  widget.toggle()
+</script>
 </body>
 </html>
